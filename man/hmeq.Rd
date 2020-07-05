@@ -4,7 +4,8 @@
 \name{hmeq}
 \alias{hmeq}
 \title{Credit attributes of 5,960 home equity loans}
-\format{A data frame with 5960 rows and 13 variables:
+\format{
+A data frame with 5960 rows and 13 variables:
 \describe{
   \item{BAD}{indicator of applicant defaulted on loan or seriously delinquent}
   \item{LOAN}{Amount of the loan request, in dollar}
@@ -19,7 +20,8 @@
   \item{NINQ}{Number of recent credit inquiries}
   \item{CLNO}{Number of credit lines}
   \item{DEBTINC}{Debt-to-income ratio}
-}}
+}
+}
 \source{
 \url{http://www.creditriskanalytics.net/datasets-private2.html}
 }

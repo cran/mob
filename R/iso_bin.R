@@ -1,40 +1,36 @@
 #' Monotonic binning based on isotonic regression
 #'
-#' The function \code{iso_bin} implements the monotonic binning based on the isotonic regression
-#' by calling the isoreg() function in the stat library.
+#' The function \code{iso_bin} implements the monotonic binning based on 
+#' the isotonic regression.
 #'
-#' @param data A input dataframe
-#' @param y    The name of Y with 0/1 binary values
-#' @param x    The name of X with numeric values
+#' @param x A numeric vector 
+#' @param y A numeric vector with 0/1 binary values
 #'
-#' @return A list of binning outcomes, including a list of cut points and a summary dataframe
+#' @return A list of binning outcomes, including a numeric vector with cut
+#'         points and a dataframe with binning summary
 #'
 #' @examples
 #' data(hmeq)
-#' iso_bin(hmeq, BAD, DEROG)
+#' iso_bin(hmeq$DEROG, hmeq$BAD)
 
-iso_bin <- function(data, y, x) {
-  yname <- deparse(substitute(y))
-  xname <- deparse(substitute(x))
-  df1 <- subset(data, !is.na(data[[xname]]) & data[[yname]] %in% c(0, 1), select = c(xname, yname))
+iso_bin <- function(x, y) {
+  x_ <- x[!is.na(x)]
+  y_ <- y[!is.na(x)]
 
-  if (length(unique(df1[[xname]])) == 1) {
-    stop(paste("there is only a single value in", xname), call. = F)
-  } else if (length(unique(df1[[xname]])) == 2) {
-    return(list(df   = manual_bin(data, yname, xname, cuts = min(unique(df1[[xname]]))),
-                cuts = min(unique(df1[[xname]]))))
-  } else {
-    df2 <- df1[order(df1[[xname]]), ]
-    spc <- cor(df2[, 2], df2[, 1], method = "spearman", use = "complete.obs")
-    df3 <- with(isoreg(df2[[xname]], spc / abs(spc) * df2[[yname]]), data.frame(x = x, y = y, yhat = yf))
-    df4 <- Reduce(rbind, 
-             lapply(split(df3, df3$yhat), 
-               function(x) data.frame(maxx = max(x$x), yavg = abs(mean(x$y)), yhat = abs(round(mean(x$yhat), 8)))))
-    df5 <- df4[order(df4$maxx), ]  
-    h <- ifelse(df5[["yavg"]][1] %in% c(0, 1), 2, 1)
-    t <- ifelse(df5[["yavg"]][nrow(df5)] %in% c(0, 1), 2, 1)
-    cuts <- df5$maxx[h:(nrow(df5) - t)]
-    return(list(df = manual_bin(data, yname, xname, cuts = cuts), 
-                cuts = cuts))
-  }
+  odx <- x_[order(x_)]
+  ody <- y_[order(x_)]
+  spc <- cor(odx, ody, method = "spearman")
+
+  d1 <- with(isoreg(odx, spc / abs(spc) * ody), data.frame(x = x, y = y, cat = yf))
+
+  l1 <- lapply(split(d1, d1$cat), 
+               function(d) list(rate = abs(round(mean(d$y), 8)), maxx = max(d$x)))
+
+  l2 <- l1[Reduce(c, lapply(l1, function(l) l$rate > 0 & l$rate < 1))]
+
+  l3 <- sort(Reduce(c, lapply(l2, function(l) l$maxx)))[-length(l2)]
+
+  l4 <- manual_bin(x_, y_, l3)
+
+  return(list(cut = l3, tbl = gen_woe(add_miss(l4, x, y), l3)))
 }

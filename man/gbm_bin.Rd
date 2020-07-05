@@ -2,25 +2,24 @@
 % Please edit documentation in R/gbm_bin.R
 \name{gbm_bin}
 \alias{gbm_bin}
-\title{Monotonic binning based on the generalized boosted regression model (GBM)}
+\title{Monotonic binning based on generalized boosted model}
 \usage{
-gbm_bin(data, y, x)
+gbm_bin(x, y)
 }
 \arguments{
-\item{data}{A input dataframe}
+\item{x}{A numeric vector}
 
-\item{y}{The name of Y with 0/1 binary values}
-
-\item{x}{The name of X with numeric values}
+\item{y}{A numeric vector with 0/1 binary values}
 }
 \value{
-A list of binning outcomes, including a list of cut points and a summary dataframe
+A list of binning outcomes, including a numeric vector with cut
+        points and a dataframe with binning summary
 }
 \description{
-The function \code{gbm_bin} implements the monotonic binning based on the generalized boosted 
-regression model (GBM) by calling the gbm library.
+The function \code{gbm_bin} implements the monotonic binning based on 
+the generalized boosted model (GBM).
 }
 \examples{
 data(hmeq)
-gbm_bin(hmeq, BAD, DEROG)
+gbm_bin(hmeq$DEROG, hmeq$BAD)
 }

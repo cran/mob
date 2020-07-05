@@ -20,4 +20,3 @@
 #' }
 #' @source \url{http://www.creditriskanalytics.net/datasets-private2.html}
 "hmeq"
-

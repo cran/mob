@@ -1,7 +1,7 @@
-#' Monotonic binning by quantile with cases Y = 1
+#' Monotonic binning by quantile based on value range
 #'
-#' The function \code{bad_bin} implements the quantile-based monotonic binning 
-#' by the iterative discretization based on cases with Y = 1.
+#' The function \code{rng_bin} implements the quantile-based monotonic binning 
+#' by the iterative discretization based on the equal-width range of values.
 #'
 #' @param x A numeric vector 
 #' @param y A numeric vector with 0/1 binary values
@@ -11,16 +11,16 @@
 #'
 #' @examples
 #' data(hmeq)
-#' bad_bin(hmeq$DEROG, hmeq$BAD)
+#' rng_bin(hmeq$DEROG, hmeq$BAD)
 
-bad_bin <- function(x, y) {
+rng_bin <- function(x, y) {
   x_ <- x[!is.na(x)]
   y_ <- y[!is.na(x)]
-  n_ <- 2:max(2, min(50, length(unique(x_[y_ == 1])) - 1))
-  p_ <- unique(lapply(n_, function(n) qcut(x_[y_ == 1], n)))
+  n_ <- 2:max(2, min(50, length(unique(x_)) - 1))
+  p_ <- unique(lapply(n_, function(n) qcut(unique(x_), n)))
 
   l1 <- lapply(p_, function(p) list(cut = p, out = manual_bin(x_, y_, p)))
-
+ 
   l2 <- lapply(l1[order(Reduce(c, lapply(l1, function(l) -length(l$cut))))], 
                function(l) list(cut  = l$cut, 
                                 minr = min(l$out$bads / l$out$freq), 

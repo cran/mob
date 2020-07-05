@@ -4,24 +4,24 @@
 \alias{cal_woe}
 \title{Perform WoE transformation of a numeric variable}
 \usage{
-cal_woe(data, xname, spec)
+cal_woe(x, bin)
 }
 \arguments{
-\item{data}{A input dataframe}
+\item{x}{A numeric vector that will be transformed to WoE values.}
 
-\item{xname}{The name string of X with numeric values to which the WoE is applied}
-
-\item{spec}{The output table from the binning function, e.g. qtl_bin() or iso_bin()}
+\item{bin}{A list with the binning outcome from the binning function, 
+e.g. qtl_bin() or iso_bin()}
 }
 \value{
-A list of WoE transformation outputs, including a dataframe with the transformed variable and a PSI summary
+A numeric vector with WoE transformed values.
 }
 \description{
-The function \code{cal_woe} performs the WoE transformation of a numeric variable based on the output 
-specification from a binning function, e.g. qtl_bin() or iso_bin().
+The function \code{cal_woe} applies the WoE transformation to a numeric 
+vector based on the binning outcome from a binning function, e.g. qtl_bin()
+or iso_bin().
 }
 \examples{
 data(hmeq)
-bin_out <- qtl_bin(hmeq, BAD, DEROG)
-cal_woe(hmeq, "DEROG", bin_out$df)
+bin_out <- qtl_bin(hmeq$DEROG, hmeq$BAD)
+cal_woe(hmeq$DEROG[1:10], bin_out)
 }

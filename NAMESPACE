@@ -1,13 +1,14 @@
+
 import(stats)
 import(gbm)
 import(Rborist)
-import(Hmisc)
 
 export(arb_bin)
 export(bad_bin)
 export(qtl_bin)
 export(iso_bin)
 export(gbm_bin)
-export(manual_bin)
+export(kmn_bin)
+export(rng_bin)
 export(cal_woe)
-
+export(qcut)

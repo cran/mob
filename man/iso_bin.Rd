@@ -4,23 +4,22 @@
 \alias{iso_bin}
 \title{Monotonic binning based on isotonic regression}
 \usage{
-iso_bin(data, y, x)
+iso_bin(x, y)
 }
 \arguments{
-\item{data}{A input dataframe}
+\item{x}{A numeric vector}
 
-\item{y}{The name of Y with 0/1 binary values}
-
-\item{x}{The name of X with numeric values}
+\item{y}{A numeric vector with 0/1 binary values}
 }
 \value{
-A list of binning outcomes, including a list of cut points and a summary dataframe
+A list of binning outcomes, including a numeric vector with cut
+        points and a dataframe with binning summary
 }
 \description{
-The function \code{iso_bin} implements the monotonic binning based on the isotonic regression
-by calling the isoreg() function in the stat library.
+The function \code{iso_bin} implements the monotonic binning based on 
+the isotonic regression.
 }
 \examples{
 data(hmeq)
-iso_bin(hmeq, BAD, DEROG)
+iso_bin(hmeq$DEROG, hmeq$BAD)
 }

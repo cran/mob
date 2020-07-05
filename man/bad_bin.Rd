@@ -2,25 +2,24 @@
 % Please edit documentation in R/bad_bin.R
 \name{bad_bin}
 \alias{bad_bin}
-\title{Monotonic binning based on bads only}
+\title{Monotonic binning by quantile with cases Y = 1}
 \usage{
-bad_bin(data, y, x)
+bad_bin(x, y)
 }
 \arguments{
-\item{data}{A input dataframe}
+\item{x}{A numeric vector}
 
-\item{y}{The name of Y with 0/1 binary values}
-
-\item{x}{The name of X with numeric values}
+\item{y}{A numeric vector with 0/1 binary values}
 }
 \value{
-A list of binning outcomes, including a list of cut points and a summary dataframe
+A list of binning outcomes, including a numeric vector with cut
+        points and a dataframe with binning summary
 }
 \description{
-The function \code{bad_bin} implements the monotonic binning only based on bads, e.g. Y = 1,
-by the iterative discretization.
+The function \code{bad_bin} implements the quantile-based monotonic binning 
+by the iterative discretization based on cases with Y = 1.
 }
 \examples{
 data(hmeq)
-bad_bin(hmeq, BAD, DEROG)
+bad_bin(hmeq$DEROG, hmeq$BAD)
 }

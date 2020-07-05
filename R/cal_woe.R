@@ -1,45 +1,30 @@
-#' Perform WoE transformation of a numeric variable 
+#' Perform WoE transformation of a numeric variable
 #'
-#' The function \code{cal_woe} performs the WoE transformation of a numeric variable based on the output 
-#' specification from a binning function, e.g. qtl_bin() or iso_bin().
+#' The function \code{cal_woe} applies the WoE transformation to a numeric 
+#' vector based on the binning outcome from a binning function, e.g. qtl_bin()
+#' or iso_bin().
 #'
-#' @param data  A input dataframe
-#' @param xname The name string of X with numeric values to which the WoE is applied
-#' @param spec  The output table from the binning function, e.g. qtl_bin() or iso_bin()
+#' @param x   A numeric vector that will be transformed to WoE values. 
+#' @param bin A list with the binning outcome from the binning function, 
+#'            e.g. qtl_bin() or iso_bin()
 #'
-#' @return A list of WoE transformation outputs, including a dataframe with the transformed variable and a PSI summary
+#' @return A numeric vector with WoE transformed values.
 #'
 #' @examples
 #' data(hmeq)
-#' bin_out <- qtl_bin(hmeq, BAD, DEROG)
-#' cal_woe(hmeq, "DEROG", bin_out$df)
+#' bin_out <- qtl_bin(hmeq$DEROG, hmeq$BAD)
+#' cal_woe(hmeq$DEROG[1:10], bin_out)
 
-cal_woe <- function(data, xname, spec) {
-  wname <- paste("woe", xname, sep = ".")
-  calc <- function(i) {
-    s <- spec[i, ]
-    if (length(with(data, which(eval(parse(text = gsub("$X", xname, s$rule, fixed = T)))))) == 0) {
-      return()
-    } else {
-      d <- data[with(data, which(eval(parse(text = gsub("$X", xname, s$rule, fixed = T))))), ]
-      d$woe.bin <- s$bin
-      return(within(d, assign(wname, s$woe)))
-    }
-  }
-  df1 <- Reduce(rbind, Map(calc, seq(nrow(spec))))
-  sm1 <- Reduce(rbind,
-           Map(function(x) data.frame(bin      = unique(x$woe.bin), 
-                                      cal_freq = nrow(x),
-                                      cal_dist = round(nrow(x) / nrow(df1), 4), 
-                                      cal_woe  = mean(x[[wname]])),
-             split(df1, df1$woe.bin, drop = T)))
-  sm2 <- merge(spec[, c("bin", "rule", "dist", "woe")], sm1, by = c("bin"), all = T)
-  sm2$psi <- round((sm2$cal_dist - sm2$dist) * log(sm2$cal_dist / sm2$dist), 4)
-  woe_out <- list(df = df1, psi = sm2)
-  class(woe_out) <- "psi"
-  return(woe_out)
+cal_woe <- function(x, bin) {
+  cut <- sort(c(bin$cut, -Inf, Inf))
+  cat <- Reduce(c, lapply(x, function(x_) ifelse(is.na(x_), 0, findInterval(x_, cut, left.open = T))))
+  tbl <- bin$tbl[, c("bin", "woe")]
+
+  d1 <- data.frame(i = seq(length(x)), x = x, bin = cat)
+
+  d2 <- merge(x = d1, y = tbl, by = "bin", all.x = TRUE)
+  d2$woe <- ifelse(is.na(d2$woe), 0, d2$woe)
+
+  return(d2[order(d2$i), ]$woe)
 }
 
-print.psi <- function(x) {
-  print(x$psi)
-}

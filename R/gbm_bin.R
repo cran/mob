@@ -1,42 +1,39 @@
-#' Monotonic binning based on the generalized boosted regression model (GBM) 
+#' Monotonic binning based on generalized boosted model
 #'
-#' The function \code{gbm_bin} implements the monotonic binning based on the generalized boosted 
-#' regression model (GBM) by calling the gbm library.
+#' The function \code{gbm_bin} implements the monotonic binning based on 
+#' the generalized boosted model (GBM).
 #'
-#' @param data A input dataframe
-#' @param y    The name of Y with 0/1 binary values
-#' @param x    The name of X with numeric values
+#' @param x A numeric vector 
+#' @param y A numeric vector with 0/1 binary values
 #'
-#' @return A list of binning outcomes, including a list of cut points and a summary dataframe
+#' @return A list of binning outcomes, including a numeric vector with cut
+#'         points and a dataframe with binning summary
 #'
 #' @examples
 #' data(hmeq)
-#' gbm_bin(hmeq, BAD, DEROG)
+#' gbm_bin(hmeq$DEROG, hmeq$BAD)
 
-gbm_bin <- function(data, y, x) {
-  yname <- deparse(substitute(y))
-  xname <- deparse(substitute(x))
-  df1 <- subset(data, !is.na(data[[xname]]) & data[[yname]] %in% c(0, 1), select = c(xname, yname))
+gbm_bin <- function(x, y) {
+  x_ <- x[!is.na(x)]
+  y_ <- y[!is.na(x)]
 
-  if (length(unique(df1[[xname]])) == 1) {
-    stop(paste("there is only a single value in", xname), call. = F)
-  } else if (length(unique(df1[[xname]])) == 2) {
-    return(list(df   = manual_bin(data, yname, xname, cuts = min(unique(df1[[xname]]))),
-                cuts = min(unique(df1[[xname]]))))
-  } else {
-    df2 <- data.frame(y = df1[[yname]], x = df1[[xname]], x2 = df1[[xname]])
-    spc <- cor(df2[, 2], df2[, 1], method = "spearman", use = "complete.obs")
-    mdl <- gbm::gbm(y ~ x + x2, distribution = "bernoulli", data = df2, var.monotone = c(spc / abs(spc), spc / abs(spc)), 
-                  bag.fraction = 1, n.minobsinnode = round(nrow(df2) / 100))
-    df3 <- data.frame(y = df2$y, x = df2$x, yhat = gbm::predict.gbm(mdl, n.trees = mdl$n.trees, type = "response"))
-    df4 <- Reduce(rbind, 
-             lapply(split(df3, df3$yhat), 
-               function(x) data.frame(maxx = max(x$x), yavg = mean(x$y), yhat = round(mean(x$yhat), 8))))
-    df5 <- df4[order(df4$maxx), ]
-    h <- ifelse(df5[["yavg"]][1] %in% c(0, 1), 2, 1)
-    t <- ifelse(df5[["yavg"]][nrow(df5)] %in% c(0, 1), 2, 1)
-    cuts <- df5$maxx[h:max(h, (nrow(df5) - t))]
-    return(list(df   = manual_bin(data, yname, xname, cuts = cuts), 
-                cuts = cuts))  
-  }
+  spc <- cor(x_, y_, method = "spearman")
+
+  set.seed(1)
+  m_ <- gbm::gbm(y ~ x1 + x2, distribution = "bernoulli", data = data.frame(y = y_, x1 = x_, x2 = x_), 
+                 var.monotone = c(spc / abs(spc), spc / abs(spc)),
+                 bag.fraction = 1, n.minobsinnode = round(length(x_) / 100), n.trees = 500)
+
+  d1 <- data.frame(y = y_, x = x_, cat = gbm::predict.gbm(m_, n.trees = m_$n.trees, type = "response"))
+
+  l1 <- lapply(split(d1, d1$cat), 
+               function(d) list(rate = abs(round(mean(d$y), 8)), maxx = max(d$x)))
+
+  l2 <- l1[Reduce(c, lapply(l1, function(l) l$rate > 0 & l$rate < 1))]
+
+  l3 <- sort(Reduce(c, lapply(l2, function(l) l$maxx)))[-length(l2)]
+
+  l4 <- manual_bin(x_, y_, l3)
+
+  return(list(cut = l3, tbl = gen_woe(add_miss(l4, x, y), l3)))
 }
