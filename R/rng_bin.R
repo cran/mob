@@ -17,7 +17,8 @@ rng_bin <- function(x, y) {
   x_ <- x[!is.na(x)]
   y_ <- y[!is.na(x)]
   n_ <- 2:max(2, min(50, length(unique(x_)) - 1))
-  p_ <- unique(lapply(n_, function(n) qcut(unique(x_), n)))
+  p_ <- unique(append(lapply(n_, function(n) qcut(unique(x_), n)), 
+                      list(median(x_[y_ == 1]))))
 
   l1 <- lapply(p_, function(p) list(cut = p, out = manual_bin(x_, y_, p)))
  

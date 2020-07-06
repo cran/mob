@@ -23,7 +23,8 @@ kmn_bin <- function(x, y) {
 
   c2 <- lapply(c1, function(c) sort(Reduce(c, lapply(split(x_, c$cluster), max))))
   
-  p_ <- unique(append(lapply(c2, function(c) c[-length(c)]), list(median(x_[y_ == 1]))))
+  p_ <- unique(append(lapply(c2, function(c) c[-length(c)]), 
+                      list(median(x_[y_ == 1]))))
 
   l1 <- lapply(p_, function(p) list(cut = p, out = manual_bin(x_, y_, p)))
  

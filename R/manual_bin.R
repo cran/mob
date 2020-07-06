@@ -25,4 +25,3 @@ manual_bin <- function(x, y, cut) {
                                minx = min(x$x),
                                maxx = max(x$x)))))
 }
-
