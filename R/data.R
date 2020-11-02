@@ -1,6 +1,7 @@
 #' Credit attributes of 5,960 home equity loans
 #'
-#' A dataset containing characteristics and delinquency information for 5,960 home equity loans.
+#' A dataset containing characteristics and delinquency information for 5,960 
+#' home equity loans.
 #'
 #' @format A data frame with 5960 rows and 13 variables:
 #' \describe{

@@ -13,3 +13,6 @@ export(rng_bin)
 
 export(cal_woe)
 export(qcut)
+
+export(batch_bin)
+export(batch_woe)

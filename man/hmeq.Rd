@@ -29,6 +29,7 @@ A data frame with 5960 rows and 13 variables:
 hmeq
 }
 \description{
-A dataset containing characteristics and delinquency information for 5,960 home equity loans.
+A dataset containing characteristics and delinquency information for 5,960 
+home equity loans.
 }
 \keyword{datasets}
