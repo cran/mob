@@ -40,4 +40,3 @@ batch_bin <- function(y, xs, method = 1) {
 
   return(list(bin_sum = bin_sum, bin_out = bin_out))
 }
-

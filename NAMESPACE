@@ -11,6 +11,8 @@ export(gbm_bin)
 export(kmn_bin)
 export(rng_bin)
 
+export(pool_bin)
+
 export(cal_woe)
 export(qcut)
 

@@ -37,3 +37,4 @@ gbm_bin <- function(x, y) {
 
   return(list(cut = l3, tbl = gen_woe(add_miss(l4, x, y), l3)))
 }
+

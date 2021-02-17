@@ -4,7 +4,7 @@
 #' in the dataframe.
 #'
 #' @param xs      A dataframe with numeric vectors to discretize.
-#' @param bin_out A integer from 1 to 7 referring to implementations below:
+#' @param bin_out A binning output from the function batch_bin(). 
 #'
 #' @return A dataframe with identical headers as the input xs. However, values
 #'         of each variable have been transformed to WoE values.
@@ -24,4 +24,3 @@ batch_woe <- function(xs, bin_out) {
   colnames(woe_out) <- xlst
   return(woe_out)
 }
-

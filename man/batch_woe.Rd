@@ -9,7 +9,7 @@ batch_woe(xs, bin_out)
 \arguments{
 \item{xs}{A dataframe with numeric vectors to discretize.}
 
-\item{bin_out}{A integer from 1 to 7 referring to implementations below:}
+\item{bin_out}{A binning output from the function batch_bin().}
 }
 \value{
 A dataframe with identical headers as the input xs. However, values
