@@ -16,15 +16,15 @@
 #' cal_woe(hmeq$DEROG[1:10], bin_out)
 
 cal_woe <- function(x, bin) {
-  cut <- sort(c(bin$cut, -Inf, Inf))
-  cat <- Reduce(c, lapply(x, function(x_) ifelse(is.na(x_), 0, findInterval(x_, cut, left.open = T))))
   tbl <- bin$tbl[, c("bin", "woe")]
+  cut <- sort(c(bin$cut, -Inf, Inf))
+  cat <- Reduce(c, lapply(unique(x), function(x_) ifelse(is.na(x_), 0, findInterval(x_, cut, left.open = TRUE))))
 
-  d1 <- data.frame(i = seq(length(x)), x = x, bin = cat)
+  d1 <- data.frame(i = seq(length(x)), x = x)
+  d2 <- data.frame(x = unique(x), bin = cat)
+  d3 <- merge(x = merge(x = d1, y = d2, by = "x", all.x = TRUE), y = tbl, by = "bin", all.x = TRUE)
+  d3$woe <- ifelse(is.na(d3$woe), 0, d3$woe)
 
-  d2 <- merge(x = d1, y = tbl, by = "bin", all.x = TRUE)
-  d2$woe <- ifelse(is.na(d2$woe), 0, d2$woe)
-
-  return(d2[order(d2$i), ]$woe)
+  return(d3[order(d3$i), ]$woe)
 }
 

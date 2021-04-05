@@ -69,5 +69,5 @@ pool_bin <- function(x, num, den) {
     }
   }
 
-  return(list(cut = l3, tbl = gen_woe(d4, l3)))
+  return(list(cut = l3, tbl = gen_woe2(d4, l3)))
 }
