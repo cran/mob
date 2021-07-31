@@ -1,4 +1,4 @@
-735a6fc150be93dbfd8808399f908442 *DESCRIPTION
+91298bc63f01c630753fbad098614a52 *DESCRIPTION
 f4e61ecc74adbb54ff6cdad8966af495 *NAMESPACE
 2f2522b65cefd49c67bca57f110d736b *R/add_miss.R
 83c8d1b2d3d7a801d2cec61ce27a0999 *R/arb_bin.R
@@ -13,7 +13,7 @@ d403c436b018919c46036316530ec04b *R/gen_woe2.R
 02b5eaab0ccda03d9565bb90db602266 *R/iso_bin.R
 22c1b31039894c53538f94eb06554731 *R/kmn_bin.R
 92b0e90f588ab916c072e98d240af00d *R/manual_bin.R
-ae1cf5ae105fa5553b9a882183848612 *R/pool_bin.R
+3e1b25b386f94f9d860e571feba06d1a *R/pool_bin.R
 4a13156a589e071e1c24d2a2892b31aa *R/qcut.R
 513d1ef3059e4f83a9665898db637f5f *R/qtl_bin.R
 88585f20ef455f5c21a49a88ac2f5ae1 *R/rng_bin.R
@@ -27,7 +27,7 @@ e1ce1d2b574cf3446225e11c06b73376 *man/batch_woe.Rd
 ceaf18482c6fc3eaa813d8ef574e8ac9 *man/hmeq.Rd
 e8b3d4c5f351057e7f32c6623bf5bd93 *man/iso_bin.Rd
 908a6cdfa0790ef4fe454fc52d9bb662 *man/kmn_bin.Rd
-847c4ce24e36dac039e5b63ac8368146 *man/pool_bin.Rd
+b6b88f62420cc494c1ecb594d4f7b92f *man/pool_bin.Rd
 feea6b296d87f9c2924a6633da9fbfcb *man/qcut.Rd
 249e102256ede4a24d47d4adf3b7b474 *man/qtl_bin.Rd
 fff64c37e5b2a128e36a7d53f6445f27 *man/rng_bin.Rd

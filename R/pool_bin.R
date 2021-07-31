@@ -6,6 +6,7 @@
 #' @param x   A numeric vector
 #' @param num A numeric vector with integer values for numerators to calculate bad rates
 #' @param den A numeric vector with integer values for denominators to calculate bad rates
+#' @param log A logical constant either TRUE or FALSE. The default is FALSE
 #'
 #' @return A list of binning outcomes, including a numeric vector with cut
 #'         points and a dataframe with binning summary
@@ -20,9 +21,9 @@
 #'             data.frame(AGE = NA, 
 #'                        NUM = sum(hmeq[is.na(hmeq$CLAGE), ]$BAD),
 #'                        DEN = nrow(hmeq[is.na(hmeq$CLAGE), ])))
-#' pool_bin(df$AGE, df$NUM, df$DEN) 
+#' pool_bin(df$AGE, df$NUM, df$DEN, log = TRUE) 
 
-pool_bin <- function(x, num, den) {
+pool_bin <- function(x, num, den, log = FALSE) {
   x_ <- x[!is.na(x)]
   n_ <- num[!is.na(x)]
   d_ <- den[!is.na(x)]
@@ -69,5 +70,9 @@ pool_bin <- function(x, num, den) {
     }
   }
 
-  return(list(cut = l3, tbl = gen_woe2(d4, l3)))
+  if (log == TRUE) {
+    return(list(cut = l3, tbl = gen_woe2(d4, l3)))
+  } else {
+    return(list(cut = l3, tbl = gen_woe(d4, l3)))
+  }
 }

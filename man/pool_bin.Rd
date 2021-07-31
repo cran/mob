@@ -4,7 +4,7 @@
 \alias{pool_bin}
 \title{Monotonic binning for the pool data}
 \usage{
-pool_bin(x, num, den)
+pool_bin(x, num, den, log = FALSE)
 }
 \arguments{
 \item{x}{A numeric vector}
@@ -12,6 +12,8 @@ pool_bin(x, num, den)
 \item{num}{A numeric vector with integer values for numerators to calculate bad rates}
 
 \item{den}{A numeric vector with integer values for denominators to calculate bad rates}
+
+\item{log}{A logical constant either TRUE or FALSE. The default is FALSE}
 }
 \value{
 A list of binning outcomes, including a numeric vector with cut
@@ -31,5 +33,5 @@ df <- rbind(Reduce(rbind,
             data.frame(AGE = NA, 
                        NUM = sum(hmeq[is.na(hmeq$CLAGE), ]$BAD),
                        DEN = nrow(hmeq[is.na(hmeq$CLAGE), ])))
-pool_bin(df$AGE, df$NUM, df$DEN) 
+pool_bin(df$AGE, df$NUM, df$DEN, log = TRUE) 
 }
